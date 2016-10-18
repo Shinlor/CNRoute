@@ -4,6 +4,7 @@
 import urllib.request
 import re
 import winroute.winroute as winroute
+import sys
 
 
 
@@ -59,7 +60,7 @@ def getcnip():
 
 def upgradecnip():
     
-    print("正在更新CNip地址........")
+    print("正在更新国内IP地址数据........")
     
 
     cnip= getcnip()
@@ -68,7 +69,7 @@ def upgradecnip():
     for i in cnip:
         print (i[0],i[1],file=f)  #输出至文件,print会自动添加空格，用于后面的分割
         #print (cnip)
-    print("IP地址更新完毕!")
+    print("国内IP地址数据更新完毕!")
     f.close()
     
 def readcnip():
@@ -88,35 +89,57 @@ def readcnip():
         return tmp
                 
     except:
-        print("文件读取异常，重新获取CN的IP地址")
+        print("文件读取异常，重新获取国内IP地址数据")
         upgradecnip()
-        print("更新完成，请重新启动")
+        print("重新获取国内IP地址数据完成!")
+        inputwrite()
+        inputexit()
+        
+        
     
 def wtroute():
     route=winroute.WinRoute()
     iplist=readcnip()
-    print ("正在写入route")
+    print ("正在写入Route")
     for i in iplist:
         route.CreateIpForwardEntry(i[0], i[1],dwForwardMetric=5)
     print ("完成")
         
-up=input("是否更新CNip地址，建议每隔一段时间更新一次（Y/N)?")
-while up!="Y" and up!="N" and up!="y" and  up!="n":
-    up = input("输入错误请重新输入是否更新CNip地址，建议每隔一段时间更新一次（Y/N)?")
-if up=="Y" or up=="y":
-    upgradecnip()
-if up=="N" or up=="n":
-    pass
-
-rt=input("是否开始写入路由(Y/N)?")
-
-while rt!="Y" and rt!="N" and rt!="y" and  rt!="n":
-    rt = input("输入错误请重新输入是否更新CNip地址，建议每隔一段时间更新一次（Y/N)?")
-if rt=="Y" or rt=="y":
-    wtroute()
+def inputupgrade():
+    up=input("是否更新国内IP地址数据，建议每隔一段时间更新一次（Y/N)?")
+    while up!="Y" and up!="N" and up!="y" and  up!="n":
+        up = input("输入错误，请重新输入是否更新国内IP地址数据（Y/N)?")
+    if up=="Y" or up=="y":
+        upgradecnip()
+    if up=="N" or up=="n":
+        pass
     
+def inputwrite():
     
-if rt=="N" or rt=="n":
-    pass
+    rt=input("是否开始写入路由(Y/N)?")
+    
+    while rt!="Y" and rt!="N" and rt!="y" and  rt!="n":
+        rt = input("输入错误请重新输入是否是否开始写入路由（Y/N)?")
+    if rt=="Y" or rt=="y":
+        wtroute()
+        
+        
+    if rt=="N" or rt=="n":
+        pass    
 
+def inputexit():
+    
+    rt=input("输入exit退出或直接关闭本窗口：")
+    
+    while rt!="exit" and rt!="EXIT" :
+        rt = input("输入错误输入exit退出或直接关闭本窗口")
+    if rt=="exit" or rt=="EXIT":
+        sys.exit()
+        
+  
+print ("请于'https://github.com/Shinlor/CNRoute/raw/master/cnroute.exe'获取本程序最新版")
+print ("详情参考'https://github.com/Shinlor/CNRoute'")
+inputupgrade()
+inputwrite()
+inputexit()
     
