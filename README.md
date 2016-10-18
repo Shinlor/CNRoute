@@ -1,4 +1,4 @@
-# cnroute
+# CNRoute
 Add the route, so that the domestic (china) IP address does not across the VPN
 
 - 程序利用来自 
